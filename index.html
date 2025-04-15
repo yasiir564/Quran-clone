@@ -500,26 +500,14 @@
 
 /* Surah Section */
 .surahs-section {
-    padding: 80px 0;
+    padding: 60px 0;
     background-color: var(--bg-light);
-    position: relative;
-}
-
-.surahs-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 8px;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-    opacity: 0.5;
 }
 
 .surahs-container {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 30px;
 }
 
 .surahs-navigation {
@@ -527,7 +515,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 15px;
 }
 
 .surahs-tabs {
@@ -535,18 +523,14 @@
     background-color: var(--bg-white);
     border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: 0 4px 15px var(--shadow);
-    position: relative;
+    box-shadow: 0 2px 5px var(--shadow);
 }
 
 .surahs-tab {
-    padding: 12px 24px;
+    padding: 10px 20px;
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
-    letter-spacing: 0.5px;
+    font-weight: 500;
+    transition: var(--transition);
 }
 
 .surahs-tab.active {
@@ -555,229 +539,148 @@
 }
 
 .surahs-tab:hover:not(.active) {
-    background-color: rgba(31, 161, 119, 0.08);
-    transform: translateY(-2px);
-}
-
-.surahs-tab::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 3px;
-    background-color: var(--primary);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
-.surahs-tab:hover::after:not(.active) {
-    width: 70%;
+    background-color: rgba(31, 161, 119, 0.1);
 }
 
 .surahs-sort {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background-color: var(--bg-white);
-    padding: 8px 16px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    gap: 10px;
 }
 
 .sort-label {
-    font-weight: 600;
-    color: var(--text);
+    font-weight: 500;
 }
 
 .sort-select {
-    padding: 10px 16px;
+    padding: 8px 12px;
     border-radius: var(--border-radius);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid #ddd;
     background-color: var(--bg-white);
     color: var(--text);
     font-family: inherit;
     cursor: pointer;
     outline: none;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 36px;
+    transition: var(--transition);
 }
 
 .sort-select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(31, 161, 119, 0.1);
-}
-
-.sort-select:hover {
-    border-color: var(--primary-light);
 }
 
 .surahs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
 }
 
 .surah-card {
-    background-color: var(--bg-white);
-    border-radius: var(--border-radius);
-    padding: 24px;
-    box-shadow: 0 6px 16px var(--shadow);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    cursor: pointer;
+    background-color: #282828;
+    border-radius: 8px;
+    height: 80px;
+    display: flex;
+    align-items: center;
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    display: flex;
-    flex-direction: column;
-}
-
-.surah-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 0;
-    background: linear-gradient(180deg, var(--primary) 0%, transparent 100%);
-    opacity: 0.03;
-    transition: height 0.4s ease;
-    z-index: 0;
+    cursor: pointer;
+    transition: var(--transition);
 }
 
 .surah-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.1);
-    border-color: rgba(31, 161, 119, 0.2);
-}
-
-.surah-card:hover::before {
-    height: 100%;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .surah-number {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 32px;
-    height: 32px;
-    background-color: var(--primary);
+    width: 50px;
+    height: 50px;
+    background-color: #333;
     color: white;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: 0 4px 8px rgba(31, 161, 119, 0.3);
-    z-index: 2;
-    transition: all 0.3s ease;
-}
-
-.surah-card:hover .surah-number {
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(31, 161, 119, 0.4);
-}
-
-.surah-name-ar {
-    font-size: 28px;
-    margin-bottom: 14px;
-    direction: rtl;
-    text-align: right;
-    font-weight: 500;
-    font-family: 'Amiri', 'Scheherazade New', 'Traditional Arabic', serif;
-    color: #333;
-    line-height: 1.4;
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 15px;
+    transform: rotate(45deg);
     position: relative;
-    z-index: 1;
-    letter-spacing: -0.5px;
-    /* Quran-like text styling */
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: all 0.3s ease;
 }
 
-.surah-card:hover .surah-name-ar {
-    transform: scale(1.03);
+.surah-number span {
+    transform: rotate(-45deg);
+}
+
+.surah-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    color: white;
+}
+
+.surah-names {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .surah-name-en {
     font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: var(--text);
-    position: relative;
-    z-index: 1;
-    transition: all 0.3s ease;
+    font-weight: 500;
+    color: white;
 }
 
-.surah-card:hover .surah-name-en {
-    color: var(--primary);
-}
-
-.surah-info {
-    display: flex;
-    justify-content: space-between;
+.surah-translation {
     font-size: 13px;
-    color: var(--text-light);
-    margin-top: 18px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    position: relative;
-    z-index: 1;
-    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.surah-type, .surah-verses {
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
+.surah-name-ar {
+    font-size: 20px;
+    font-weight: normal;
+    font-family: 'Traditional Arabic', 'Amiri', serif;
+    text-align: right;
+    direction: rtl;
+    color: white;
 }
 
-.surah-type i, .surah-verses i {
-    margin-right: 6px;
+.surah-ayahs {
     font-size: 14px;
-    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: right;
+    padding-right: 15px;
 }
 
-.surah-card:hover .surah-type i, 
-.surah-card:hover .surah-verses i {
-    color: var(--primary);
-    transform: scale(1.1);
-}
-
-/* Media Queries for Responsiveness */
+/* Media Query for responsive design */
 @media (max-width: 768px) {
     .surahs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
     
     .surah-name-ar {
-        font-size: 24px;
+        font-size: 18px;
+    }
+    
+    .surah-name-en {
+        font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
-    .surahs-navigation {
-        flex-direction: column;
-        align-items: stretch;
+    .surahs-grid {
+        grid-template-columns: 1fr;
     }
     
-    .surahs-tabs {
-        width: 100%;
-        justify-content: space-between;
+    .surah-card {
+        height: 70px;
     }
     
-    .surah-name-ar {
-        font-size: 22px;
+    .surah-number {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        margin-left: 10px;
     }
 }
         /* Footer */
