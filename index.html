@@ -575,26 +575,31 @@
 }
 
 .surah-card {
-    background-color: #282828;
-    border-radius: 8px;
+    background-color: var(--bg-white);
+    border-radius: var(--border-radius);
     height: 80px;
     display: flex;
     align-items: center;
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    transition: var(--transition);
+    box-shadow: 0 3px 10px var(--shadow);
+    transition: all 0.3s ease;
 }
 
 .surah-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px var(--shadow);
+}
+
+.surah-card:hover .surah-number {
+    transform: rotate(45deg) scale(1.1);
 }
 
 .surah-number {
     width: 50px;
     height: 50px;
-    background-color: #333;
+    background-color: var(--primary);
     color: white;
     display: flex;
     align-items: center;
@@ -604,10 +609,17 @@
     margin-left: 15px;
     transform: rotate(45deg);
     position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .surah-number span {
     transform: rotate(-45deg);
+    transition: all 0.3s ease;
+}
+
+.surah-card:hover .surah-number span {
+    transform: rotate(-45deg) scale(1.1);
 }
 
 .surah-content {
@@ -616,54 +628,112 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-    color: white;
+    color: var(--text);
 }
 
 .surah-names {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.surah-card:hover .surah-names {
+    transform: translateX(3px);
 }
 
 .surah-name-en {
     font-size: 16px;
     font-weight: 500;
-    color: white;
+    color: var(--text);
+    transition: all 0.3s ease;
+}
+
+.surah-card:hover .surah-name-en {
+    color: var(--primary);
 }
 
 .surah-translation {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-light);
+    transition: all 0.3s ease;
 }
 
 .surah-name-ar {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: normal;
     font-family: 'Traditional Arabic', 'Amiri', serif;
     text-align: right;
     direction: rtl;
-    color: white;
+    color: var(--text);
+    transition: all 0.3s ease;
+}
+
+.surah-card:hover .surah-name-ar {
+    transform: scale(1.05);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .surah-ayahs {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-light);
     text-align: right;
     padding-right: 15px;
+    transition: all 0.3s ease;
 }
 
-/* Media Query for responsive design */
-@media (max-width: 768px) {
+.surah-card:hover .surah-ayahs {
+    color: var(--primary);
+}
+
+/* Add decorative pseudo-elements for hover effect */
+.surah-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background-color: var(--primary);
+    transition: all 0.4s ease;
+}
+
+.surah-card:hover::before {
+    height: 100%;
+}
+
+/* Responsive design improvements */
+@media (max-width: 992px) {
     .surahs-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
+}
+
+@media (max-width: 768px) {
+    .surahs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
     
     .surah-name-ar {
-        font-size: 18px;
+        font-size: 20px;
     }
     
     .surah-name-en {
-        font-size: 14px;
+        font-size: 15px;
+    }
+    
+    .surahs-navigation {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .surahs-tabs {
+        width: 100%;
+    }
+    
+    .surahs-sort {
+        width: 100%;
+        justify-content: space-between;
     }
 }
 
@@ -681,6 +751,27 @@
         height: 40px;
         font-size: 16px;
         margin-left: 10px;
+    }
+    
+    .surah-content {
+        padding: 0 10px;
+    }
+    
+    .surah-name-ar {
+        font-size: 18px;
+    }
+    
+    .surah-name-en {
+        font-size: 14px;
+    }
+    
+    .surah-translation {
+        font-size: 12px;
+    }
+    
+    .surah-ayahs {
+        font-size: 12px;
+        padding-right: 8px;
     }
 }
         /* Footer */
