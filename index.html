@@ -1174,55 +1174,108 @@ body.dark-mode .nav-tabs button.active {
     50% { opacity: 1; transform: scale(1); }
 }
 
-/* Juz Grid */
+/* Juz Grid - Enhanced with Animations */
 .juz-grid, .revelation-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
+    perspective: 1000px; /* 3D effect for child animations */
 }
 
 .juz-card {
     background-color: white;
     border-radius: 10px;
-    padding: 15px;
+    padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    transition: var(--transition-standard);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
     overflow: hidden;
+    border-left: 3px solid transparent;
 }
 
 .juz-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    border-left: 3px solid var(--primary);
 }
 
+/* Background decoration element */
 .juz-card:before {
     content: '';
     position: absolute;
-    top: -50px;
-    left: -50px;
-    width: 100px;
-    height: 100px;
+    top: -80px;
+    right: -80px; /* Changed from left to right */
+    width: 150px;
+    height: 150px;
     background-color: var(--primary);
     opacity: 0.05;
     border-radius: 50%;
-    transition: var(--transition-standard);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 0;
 }
 
 .juz-card:hover:before {
-    transform: scale(1.5);
+    transform: scale(2.5);
+    opacity: 0.08;
+}
+
+/* Add a second decorative element */
+.juz-card:after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 120px;
+    height: 120px;
+    background-color: var(--primary);
+    opacity: 0;
+    border-radius: 50%;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 0;
+}
+
+.juz-card:hover:after {
+    transform: scale(1.8);
+    opacity: 0.05;
 }
 
 .juz-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: var(--primary);
-    margin-bottom: 10px;
-    transition: var(--transition-standard);
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
 }
-        .juz-surahs {
-    margin-top: 1rem;
+
+.juz-card:hover .juz-title {
+    transform: translateX(8px);
+    color: var(--primary);
+}
+
+/* Add a subtle underline effect on hover */
+.juz-title:after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary);
+    transition: width 0.4s ease;
+    opacity: 0.7;
+}
+
+.juz-card:hover .juz-title:after {
+    width: 40px;
+}
+
+.juz-surahs {
+    margin-top: 1.2rem;
+    position: relative;
+    z-index: 1;
 }
 
 .juz-surahs ul {
@@ -1231,22 +1284,96 @@ body.dark-mode .nav-tabs button.active {
 }
 
 .juz-surahs li {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     font-size: 0.9rem;
-    transition: var(--transition-standard);
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 5px;
 }
 
 body.dark-mode .juz-surahs li {
     color: var(--gray-light);
 }
 
-.juz-card:hover .juz-title {
+/* Staggered animation for list items on hover */
+.juz-card:hover .juz-surahs li:nth-child(1) {
     transform: translateX(5px);
+    transition-delay: 0.05s;
+}
+
+.juz-card:hover .juz-surahs li:nth-child(2) {
+    transform: translateX(5px);
+    transition-delay: 0.1s;
+}
+
+.juz-card:hover .juz-surahs li:nth-child(3) {
+    transform: translateX(5px);
+    transition-delay: 0.15s;
+}
+
+.juz-card:hover .juz-surahs li:nth-child(n+4) {
+    transform: translateX(5px);
+    transition-delay: 0.2s;
+}
+
+/* List item hover effect */
+.juz-surahs li:hover {
+    color: var(--primary);
+    transform: translateX(3px);
 }
 
 .juz-info {
     font-size: 14px;
     color: #666;
+    margin-top: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    opacity: 0.8;
+}
+
+.juz-card:hover .juz-info {
+    opacity: 1;
+    transform: translateY(-3px);
+}
+
+/* Add a subtle pulse animation on page load */
+@keyframes subtlePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+}
+
+.juz-grid {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.juz-card {
+    animation: subtlePulse 2s ease-in-out;
+}
+
+/* Add fade-in animation for page load */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Apply staggered fade-in for cards */
+.juz-card:nth-child(1) { animation-delay: 0.1s; }
+.juz-card:nth-child(2) { animation-delay: 0.2s; }
+.juz-card:nth-child(3) { animation-delay: 0.3s; }
+.juz-card:nth-child(4) { animation-delay: 0.4s; }
+.juz-card:nth-child(n+5) { animation-delay: 0.5s; }
+
+/* Add focus styles for accessibility */
+.juz-card:focus {
+    outline: 2px solid var(--primary);
+    transform: translateY(-5px);
+}
+
+/* Smooth appearance transition when switching between light/dark modes */
+.juz-card, .juz-title, .juz-info, .juz-surahs li {
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .content-tab {
