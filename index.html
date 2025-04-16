@@ -1463,15 +1463,15 @@ body.dark-mode .nav-tabs button.active {
     </footer>
 
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function() {
     // Initialize the application
     initApp();
 });
 
 async function initApp() {
     try {
-        // Fetch data
-        await Promise.all([
+        // Fetch data concurrently
+        const [surahsSuccess, juzSuccess, calendarSuccess] = await Promise.all([
             fetchSurahs(),
             fetchJuz(),
             fetchIslamicCalendar()
@@ -1583,9 +1583,12 @@ async function fetchSurahs(isAscending = true) {
             
             // Render surah cards
             renderSurahs(surahs);
+            return true;
         }
+        return false;
     } catch (error) {
         console.error("Error fetching surahs:", error);
+        return false;
     } finally {
         // Hide loading
         hideLoading();
@@ -1594,6 +1597,8 @@ async function fetchSurahs(isAscending = true) {
 
 function renderSurahs(surahs) {
     const surahGrid = document.getElementById('surah-grid');
+    if (!surahGrid) return;
+    
     surahGrid.innerHTML = '';
     
     surahs.forEach(surah => {
@@ -1623,64 +1628,55 @@ function renderSurahs(surahs) {
 
 async function fetchJuz() {
     try {
-        const juzData = [];
+        const juzGrid = document.getElementById('juz-grid');
+        if (!juzGrid) return false;
         
-        // Fetch juz data from API
-        for (let i = 1; i <= 30; i++) {
-            const response = await fetch(`https://api.alquran.cloud/v1/juz/${i}`);
-            const data = await response.json();
-            
-            if (data.code === 200) {
-                // Extract surahs contained in this juz
-                const juzSurahs = [];
-                const surahMapping = {};
-                
-                // Process surahs in this juz
-                for (const [surahNumber, ayahs] of Object.entries(data.data.surahs)) {
-                    if (!surahMapping[surahNumber]) {
-                        surahMapping[surahNumber] = {
-                            number: parseInt(surahNumber),
-                            name: ayahs.name,
-                            englishName: ayahs.englishName,
-                            ayahCount: ayahs.ayahs.length
-                        };
-                    } else {
-                        surahMapping[surahNumber].ayahCount += ayahs.ayahs.length;
-                    }
-                }
-                
-                // Convert mapping to array
-                for (const [_, surahInfo] of Object.entries(surahMapping)) {
-                    juzSurahs.push(surahInfo);
-                }
-                
-                juzData.push({
-                    number: i,
-                    name: `Juz ${i}`,
-                    surahs: juzSurahs
-                });
-            }
+        document.getElementById('loading').style.display = 'flex';
+        
+        // Instead of fetching each juz individually, fetch the overall structure
+        const response = await fetch('https://api.alquran.cloud/v1/meta');
+        const data = await response.json();
+        
+        if (data.code === 200 && data.data && data.data.juzs) {
+            const juzData = data.data.juzs;
+            renderJuz(juzData);
+            return true;
         }
-        
-        renderJuz(juzData);
+        return false;
     } catch (error) {
         console.error("Error fetching juz data:", error);
+        return false;
+    } finally {
+        hideLoading();
     }
 }
 
 function renderJuz(juzData) {
     const juzGrid = document.getElementById('juz-grid');
+    if (!juzGrid) return;
+    
     juzGrid.innerHTML = '';
     
     juzData.forEach(juz => {
         const card = document.createElement('div');
         card.className = 'juz-card';
         
+        // Extract surah information from the juz
+        const surahsInfo = [];
+        if (juz.surahs && juz.surahs.length > 0) {
+            juz.surahs.forEach(surah => {
+                surahsInfo.push({
+                    englishName: surah.englishName,
+                    ayahCount: surah.ayahs ? surah.ayahs.length : (surah.numberOfAyahs || '?')
+                });
+            });
+        }
+        
         // Create surah list HTML
         let surahsHTML = '';
-        if (juz.surahs && juz.surahs.length > 0) {
+        if (surahsInfo.length > 0) {
             surahsHTML = '<div class="juz-surahs"><strong>Contains:</strong><ul>';
-            juz.surahs.forEach(surah => {
+            surahsInfo.forEach(surah => {
                 surahsHTML += `<li>${surah.englishName} (${surah.ayahCount} ayahs)</li>`;
             });
             surahsHTML += '</ul></div>';
@@ -1688,7 +1684,7 @@ function renderJuz(juzData) {
         
         card.innerHTML = `
             <div class="juz-number">${juz.number}</div>
-            <h3 class="juz-title">${juz.name}</h3>
+            <h3 class="juz-title">Juz ${juz.number}</h3>
             ${surahsHTML}
         `;
         
@@ -1722,29 +1718,46 @@ async function fetchIslamicCalendar() {
                 const todayData = calendarData.data.find(dateData => parseInt(dateData.date.gregorian.day) === day);
                 
                 if (todayData) {
-                    // Update Islamic date
-                    const islamicDate = `${todayData.date.hijri.day} ${todayData.date.hijri.month.en} ${todayData.date.hijri.year}`;
-                    const gregorianDate = `${todayData.date.gregorian.day} ${todayData.date.gregorian.month.en} ${todayData.date.gregorian.year}`;
-                    
-                    document.getElementById('islamic-date').textContent = islamicDate;
-                    document.getElementById('gregorian-date').textContent = gregorianDate;
-                    
-                    // Update prayer times
-                    const timings = todayData.timings;
-                    document.getElementById('fajr-time').textContent = convertTo12HourFormat(timings.Fajr);
-                    document.getElementById('dhuhr-time').textContent = convertTo12HourFormat(timings.Dhuhr);
-                    document.getElementById('asr-time').textContent = convertTo12HourFormat(timings.Asr);
-                    document.getElementById('maghrib-time').textContent = convertTo12HourFormat(timings.Maghrib);
-                    document.getElementById('isha-time').textContent = convertTo12HourFormat(timings.Isha);
+                    updateCalendarUI(todayData);
                 }
             }
+            return true;
         }, (error) => {
             console.error("Error getting location:", error);
             fallbackCalendarData();
+            return false;
         });
     } catch (error) {
         console.error("Error fetching Islamic calendar data:", error);
         fallbackCalendarData();
+        return false;
+    }
+}
+
+function updateCalendarUI(todayData) {
+    // Update Islamic date
+    const islamicDate = `${todayData.date.hijri.day} ${todayData.date.hijri.month.en} ${todayData.date.hijri.year}`;
+    const gregorianDate = `${todayData.date.gregorian.day} ${todayData.date.gregorian.month.en} ${todayData.date.gregorian.year}`;
+    
+    const islamicDateEl = document.getElementById('islamic-date');
+    const gregorianDateEl = document.getElementById('gregorian-date');
+    
+    if (islamicDateEl) islamicDateEl.textContent = islamicDate;
+    if (gregorianDateEl) gregorianDateEl.textContent = gregorianDate;
+    
+    // Update prayer times
+    const timings = todayData.timings;
+    updatePrayerTime('fajr-time', timings.Fajr);
+    updatePrayerTime('dhuhr-time', timings.Dhuhr);
+    updatePrayerTime('asr-time', timings.Asr);
+    updatePrayerTime('maghrib-time', timings.Maghrib);
+    updatePrayerTime('isha-time', timings.Isha);
+}
+
+function updatePrayerTime(elementId, time) {
+    const element = document.getElementById(elementId);
+    if (element && time) {
+        element.textContent = convertTo12HourFormat(time);
     }
 }
 
@@ -1761,15 +1774,18 @@ function fallbackCalendarData() {
                 const islamicDate = `${hijri.day} ${hijri.month.en} ${hijri.year}`;
                 const gregorianDate = `${today.getDate()} ${today.toLocaleString('default', { month: 'long' })} ${today.getFullYear()}`;
                 
-                document.getElementById('islamic-date').textContent = islamicDate;
-                document.getElementById('gregorian-date').textContent = gregorianDate;
+                const islamicDateEl = document.getElementById('islamic-date');
+                const gregorianDateEl = document.getElementById('gregorian-date');
+                
+                if (islamicDateEl) islamicDateEl.textContent = islamicDate;
+                if (gregorianDateEl) gregorianDateEl.textContent = gregorianDate;
                 
                 // Set approximate prayer times based on general times
-                document.getElementById('fajr-time').textContent = "05:00 AM";
-                document.getElementById('dhuhr-time').textContent = "12:00 PM";
-                document.getElementById('asr-time').textContent = "03:30 PM";
-                document.getElementById('maghrib-time').textContent = "06:30 PM";
-                document.getElementById('isha-time').textContent = "08:00 PM";
+                updatePrayerTime('fajr-time', "05:00");
+                updatePrayerTime('dhuhr-time', "12:00");
+                updatePrayerTime('asr-time', "15:30");
+                updatePrayerTime('maghrib-time', "18:30");
+                updatePrayerTime('isha-time', "20:00");
             }
         })
         .catch(error => {
@@ -1778,6 +1794,8 @@ function fallbackCalendarData() {
 }
 
 function convertTo12HourFormat(time24) {
+    if (!time24) return "";
+    
     // Extract hours and minutes from time string (format: "HH:MM")
     const timeStr = time24.split(" ")[0];
     const [hours, minutes] = timeStr.split(":");
