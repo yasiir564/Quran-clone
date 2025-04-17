@@ -139,31 +139,134 @@ body.dark-mode .nav-tabs button.active {
     border-top: 100px solid var(--primary);
 }
 
-/* Enhanced Header */
+/* Enhanced Announcement Bar */
 .announcement-bar {
     background-color: var(--primary);
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 12px 20px;
     font-weight: 500;
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: 0.3px;
 }
 
+/* Gradient bar at top */
 .announcement-bar::before {
     content: '';
     position: absolute;
-    top: -10px;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 5px;
+    height: 2px;
     background: linear-gradient(90deg, transparent, var(--white), transparent);
-    animation: light-sweep 3s infinite linear;
+    animation: light-sweep 3s infinite ease-in-out;
 }
 
+/* Subtle background pulse effect */
+.announcement-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0;
+    z-index: -1;
+    animation: pulse 4s infinite;
+}
+
+/* Content wrapper for hover effects */
+.announcement-bar .content {
+    position: relative;
+    padding: 0 15px;
+    transition: transform 0.3s ease;
+}
+
+/* Optional icon styling */
+.announcement-bar .icon {
+    display: inline-block;
+    margin-right: 8px;
+    transform: translateY(2px);
+    transition: transform 0.3s ease;
+}
+
+/* Hover effects */
+.announcement-bar:hover {
+    padding: 14px 20px;
+    cursor: pointer;
+}
+
+.announcement-bar:hover .content {
+    transform: scale(1.03);
+}
+
+.announcement-bar:hover .icon {
+    transform: translateY(0) rotate(5deg);
+}
+
+/* Close button styling */
+.announcement-bar .close-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: white;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.announcement-bar .close-btn:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Animations */
 @keyframes light-sweep {
     0% { left: -100%; }
+    50% { left: 100%; }
     100% { left: 100%; }
+}
+
+@keyframes pulse {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+    .announcement-bar {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .announcement-bar .close-btn {
+        font-size: 16px;
+        right: 10px;
+    }
+}
+
+/* Class for when announcement is dismissed */
+.announcement-bar.dismissed {
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.3s ease;
 }
 
 .header {
@@ -1442,8 +1545,12 @@ body.dark-mode .juz-surahs li {
     </div>
     
     <div class="announcement-bar">
-        🌙 Ramadan Kareem! May this holy month bring peace and blessings to you and your family.
+    <div class="content">
+        <span class="icon">🔔</span>
+        <span>Your announcement text here</span>
     </div>
+    <button class="close-btn">&times;</button>
+</div>
     
     <header class="header">
         <div class="top-section">
