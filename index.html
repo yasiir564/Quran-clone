@@ -1885,6 +1885,55 @@ body.dark-mode .juz-surahs li {
     
     .surah-card, .juz-card, .popular-surah, .calendar-widget {
         break-
+
+        /* Custom Scrollbar for the entire page */
+
+/* For Webkit browsers (Chrome, Safari, newer Edge) */
+::-webkit-scrollbar {
+    width: 14px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(240, 240, 245, 0.8);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+    border-radius: 10px;
+    border: 3px solid rgba(240, 240, 245, 0.8);
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--primary), var(--gold));
+}
+
+/* For Firefox */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) rgba(240, 240, 245, 0.8);
+}
+
+/* For older versions of Edge */
+body {
+    -ms-overflow-style: none;
+}
+
+/* Hide default scrollbar for IE */
+body::-ms-scrollbar {
+    display: none;
+}
+
+/* Decoration for scrollbar corners */
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+/* For horizontal scrolling if needed */
+::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
     </style>
 </head>
 <body>
@@ -1904,10 +1953,17 @@ body.dark-mode .juz-surahs li {
         <div class="top-section">
             <div class="logo">Al Quran</div>
             <div class="auth-buttons">
-                <button class="btn btn-outline">Settings</button>
-                <button class="btn btn-primary">Sign In</button>
-            </div>
-        </div>
+  <button class="btn btn-outline" onclick="openOverlay('settings.html')">Settings</button>
+  <button class="btn btn-primary" onclick="openOverlay('login.html')">Sign In</button>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay">
+  <div class="overlay-content" id="overlayContent">
+    <button class="close-btn" onclick="closeOverlay()">×</button>
+    <div id="overlayInner"></div>
+  </div>
+</div>
         <div class="search-section">
             <input type="text" class="search-input" placeholder="Search surah, ayah, or keyword...">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2541,6 +2597,19 @@ function convertTo12HourFormat(time24) {
     
     return `${hours12}:${minutes} ${period}`;
 }
+         function openOverlay(page) {
+    fetch(page)
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('overlayInner').innerHTML = data;
+        document.getElementById('overlay').style.display = 'flex';
+      });
+  }
+
+  function closeOverlay() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('overlayInner').innerHTML = '';
+  }
     </script>
 </body>
 </html>
