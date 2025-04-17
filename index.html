@@ -270,27 +270,24 @@ body.dark-mode .nav-tabs button.active {
     transition: transform 0.5s ease, opacity 0.3s ease;
 }
 
-/* Improved Header */
 .header {
-    background-color: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background-color: rgba(255, 255, 255, 0.65); /* More transparent white */
+    backdrop-filter: blur(15px); /* Stronger blur effect */
+    -webkit-backdrop-filter: blur(15px); /* For Safari support */
     padding: 15px 5%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 0;
     z-index: 100;
     transition: var(--transition-standard);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    width: 100%;
-    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border for definition */
 }
 
 .header.scrolled {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.7); /* Still transparent when scrolled */
     padding: 10px 5%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); /* Even stronger blur when scrolled */
     -webkit-backdrop-filter: blur(20px);
 }
 
@@ -299,8 +296,6 @@ body.dark-mode .nav-tabs button.active {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-    flex-wrap: wrap;
-    gap: 10px;
 }
 
 .logo {
@@ -312,7 +307,7 @@ body.dark-mode .nav-tabs button.active {
     gap: 8px;
     position: relative;
     transition: var(--transition-standard);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Text shadow for better visibility */
 }
 
 .logo:hover {
@@ -332,61 +327,45 @@ body.dark-mode .nav-tabs button.active {
     100% { transform: rotate(360deg); }
 }
 
-/* Enhanced Auth Buttons */
+/* Enhanced Buttons */
 .auth-buttons {
     display: flex;
-    gap: var(--spacing-md);
-    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    border-radius: 4px;
     border: none;
     cursor: pointer;
     font-weight: 500;
-    font-size: 0.95rem;
     transition: var(--transition-standard);
     position: relative;
     overflow: hidden;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 120px;
-    letter-spacing: 0.3px;
 }
 
 .btn-primary {
     background-color: var(--primary);
-    color: var(--text-light);
-    box-shadow: var(--shadow-sm);
+    color: white;
+    box-shadow: 0 2px 5px rgba(106, 13, 173, 0.2); /* Subtle shadow for better visibility */
 }
 
 .btn-outline {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.2); /* Slight background for better visibility */
     border: 1px solid var(--primary);
     color: var(--primary);
-    font-weight: 600;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    font-weight: 600; /* Slightly bolder text for better visibility */
 }
 
 .btn:hover {
+    opacity: 0.95;
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn:active {
     transform: translateY(0);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-dark);
-}
-
-.btn-outline:hover {
-    background-color: rgba(106, 13, 173, 0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .btn:before {
@@ -404,88 +383,13 @@ body.dark-mode .nav-tabs button.active {
     left: 100%;
 }
 
-/* Fixed Overlay with Dynamic Content Support */
-.overlay {
-    position: fixed;
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity var(--transition-standard);
-}
-
-.overlay.active {
-    display: flex;
-    opacity: 1;
-}
-
-.overlay-content {
-    background: white;
-    padding: var(--spacing-lg);
-    width: 90%;
-    max-width: 600px;
-    border-radius: var(--radius-md);
-    position: relative;
-    box-shadow: var(--shadow-lg);
-    transform: translateY(20px);
-    opacity: 0;
-    transition: transform var(--transition-standard), opacity var(--transition-standard);
-    max-height: 85vh;
-    overflow-y: auto;
-}
-
-.overlay.active .overlay-content {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-#overlayInner {
-    width: 100%;
-    height: 100%;
-    min-height: 100px; /* Provides space while loading */
-}
-
-.close-btn {
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    background: var(--primary);
-    color: var(--text-light);
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition-fast);
-    box-shadow: var(--shadow-sm);
-    z-index: 10;
-}
-
-.close-btn:hover {
-    background: var(--primary-dark);
-    transform: scale(1.1);
-}
-
-/* Improved Search */
+/* Enhanced Search */
 .search-section {
     position: relative;
-    margin: 0 auto 20px;
+    margin-bottom: 20px;
     width: 100%;
     max-width: 500px;
     transition: max-width 0.3s ease;
-    animation: searchAppear 0.4s ease-out;
 }
 
 .search-section:focus-within {
@@ -500,14 +404,12 @@ body.dark-mode .nav-tabs button.active {
     font-size: 16px;
     outline: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-sizing: border-box;
 }
 
 .search-input:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.15);
     letter-spacing: 0.2px;
-    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .search-input::placeholder {
@@ -516,11 +418,6 @@ body.dark-mode .nav-tabs button.active {
 
 .search-input:focus::placeholder {
     opacity: 0.6;
-}
-
-.search-input:not(:placeholder-shown) {
-    border-color: var(--primary);
-    background-color: rgba(106, 13, 173, 0.02);
 }
 
 .search-icon {
@@ -542,6 +439,23 @@ body.dark-mode .nav-tabs button.active {
     transform: translateY(-50%) rotate(90deg);
 }
 
+/* Animation for when the search input appears */
+@keyframes searchAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-section {
+    animation: searchAppear 0.4s ease-out;
+}
+
+/* Ripple effect when clicking the search icon */
 .search-icon::after {
     content: '';
     position: absolute;
@@ -561,108 +475,20 @@ body.dark-mode .nav-tabs button.active {
     transition: 0s;
 }
 
-@keyframes searchAppear {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Clearer focus state indication */
+.search-input:focus {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Enhanced Responsive Rules */
-@media (max-width: 992px) {
-    .search-section {
-        max-width: 450px;
-    }
-    
-    .top-section {
-        margin-bottom: 10px;
-    }
+/* Visual feedback when typing */
+.search-input:not(:placeholder-shown) {
+    border-color: var(--primary);
+    background-color: rgba(106, 13, 173, 0.02);
 }
 
-@media (max-width: 768px) {
-    .header {
-        padding: 12px 4%;
-    }
-    
-    .header.scrolled {
-        padding: 8px 4%;
-    }
-    
-    .top-section {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-bottom: 12px;
-    }
-    
-    .auth-buttons {
-        margin-top: 10px;
-        align-self: stretch;
-        justify-content: space-between;
-    }
-    
-    .overlay-content {
-        width: 95%;
-        padding: var(--spacing-md);
-        max-height: 80vh;
-    }
-    
-    .btn {
-        min-width: 100px;
-        font-size: 0.9rem;
-        padding: var(--spacing-xs) var(--spacing-sm);
-    }
-    
-    .search-section {
-        max-width: 100%;
-        margin-bottom: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        padding: 10px 3%;
-    }
-    
-    .logo {
-        font-size: 20px;
-    }
-    
-    .logo:before {
-        font-size: 18px;
-    }
-    
-    .auth-buttons {
-        flex-direction: column;
-        width: 100%;
-        gap: var(--spacing-sm);
-    }
-    
-    .btn {
-        width: 100%;
-        min-width: unset;
-    }
-    
-    .close-btn {
-        width: 32px;
-        height: 32px;
-        top: var(--spacing-sm);
-        right: var(--spacing-sm);
-    }
-    
-    .search-input {
-        padding: 12px 40px 12px 15px;
-        font-size: 15px;
-    }
-    
-    .overlay-content {
-        padding: var(--spacing-sm);
-        max-height: 75vh;
-    }
-}
+/* Container and Content */
+/* Import Arabic fonts */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap');
 
 /* Container and Content */
 .container {
@@ -2059,55 +1885,6 @@ body.dark-mode .juz-surahs li {
     
     .surah-card, .juz-card, .popular-surah, .calendar-widget {
         break-
-
-        /* Custom Scrollbar for the entire page */
-
-/* For Webkit browsers (Chrome, Safari, newer Edge) */
-::-webkit-scrollbar {
-    width: 14px;
-}
-
-::-webkit-scrollbar-track {
-    background: rgba(240, 240, 245, 0.8);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, var(--primary), var(--primary-light));
-    border-radius: 10px;
-    border: 3px solid rgba(240, 240, 245, 0.8);
-    transition: all 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, var(--primary), var(--gold));
-}
-
-/* For Firefox */
-html {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) rgba(240, 240, 245, 0.8);
-}
-
-/* For older versions of Edge */
-body {
-    -ms-overflow-style: none;
-}
-
-/* Hide default scrollbar for IE */
-body::-ms-scrollbar {
-    display: none;
-}
-
-/* Decoration for scrollbar corners */
-::-webkit-scrollbar-corner {
-    background-color: transparent;
-}
-
-/* For horizontal scrolling if needed */
-::-webkit-scrollbar:horizontal {
-    height: 10px;
-}
     </style>
 </head>
 <body>
@@ -2127,17 +1904,10 @@ body::-ms-scrollbar {
         <div class="top-section">
             <div class="logo">Al Quran</div>
             <div class="auth-buttons">
-  <button class="btn btn-outline" onclick="openOverlay('settings.html')">Settings</button>
-  <button class="btn btn-primary" onclick="openOverlay('login.html')">Sign In</button>
-</div>
-
-<!-- Overlay -->
-<div class="overlay" id="overlay">
-  <div class="overlay-content" id="overlayContent">
-    <button class="close-btn" onclick="closeOverlay()">×</button>
-    <div id="overlayInner"></div>
-  </div>
-</div>
+                <button class="btn btn-outline">Settings</button>
+                <button class="btn btn-primary">Sign In</button>
+            </div>
+        </div>
         <div class="search-section">
             <input type="text" class="search-input" placeholder="Search surah, ayah, or keyword...">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2771,85 +2541,6 @@ function convertTo12HourFormat(time24) {
     
     return `${hours12}:${minutes} ${period}`;
 }
-     // JavaScript for handling dynamic overlay content
-
-// Store original scroll position
-let scrollPosition = 0;
-
-// Function to open overlay and load content
-function openOverlay(contentUrl) {
-    // Store current scroll position
-    scrollPosition = window.pageYOffset;
-    
-    // Show overlay
-    const overlay = document.getElementById('overlay');
-    const overlayContent = document.getElementById('overlayContent');
-    const overlayInner = document.getElementById('overlayInner');
-    
-    // First show the overlay
-    overlay.classList.add('active');
-    
-    // Prevent background scrolling
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollPosition}px`;
-    document.body.style.width = '100%';
-    
-    // Load content with fetch API
-    fetch(contentUrl)
-        .then(response => response.text())
-        .then(html => {
-            overlayInner.innerHTML = html;
-        })
-        .catch(error => {
-            overlayInner.innerHTML = `<p>Error loading content: ${error.message}</p>`;
-        });
-}
-
-// Function to close overlay
-function closeOverlay() {
-    const overlay = document.getElementById('overlay');
-    
-    // Hide overlay
-    overlay.classList.remove('active');
-    
-    // Restore scrolling
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    window.scrollTo(0, scrollPosition);
-    
-    // Clear content after animation completes
-    setTimeout(() => {
-        document.getElementById('overlayInner').innerHTML = '';
-    }, 300); // Match transition time
-}
-
-// Close overlay when clicking outside content
-document.getElementById('overlay').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeOverlay();
-    }
-});
-
-// Close overlay with escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('overlay').classList.contains('active')) {
-        closeOverlay();
-    }
-});
-
-// Handle any forms within the overlay
-document.addEventListener('submit', function(e) {
-    const overlay = document.getElementById('overlay');
-    
-    // If the form is inside the overlay
-    if (overlay.contains(e.target) && e.target.tagName === 'FORM') {
-        // Here you can handle form submissions if needed
-        // Example: e.preventDefault(); // Prevent default if you want to handle via AJAX
-    }
-});
     </script>
 </body>
 </html>
