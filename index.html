@@ -404,7 +404,7 @@ body.dark-mode .nav-tabs button.active {
     left: 100%;
 }
 
-/* Improved Overlay with fixed scroll issues */
+/* Fixed Overlay with Dynamic Content Support */
 .overlay {
     position: fixed;
     top: 0; 
@@ -427,14 +427,6 @@ body.dark-mode .nav-tabs button.active {
     opacity: 1;
 }
 
-/* Prevent page scrolling when overlay is active */
-body.overlay-active {
-    overflow: hidden;
-    height: 100%;
-    position: fixed;
-    width: 100%;
-}
-
 .overlay-content {
     background: white;
     padding: var(--spacing-lg);
@@ -453,6 +445,12 @@ body.overlay-active {
 .overlay.active .overlay-content {
     transform: translateY(0);
     opacity: 1;
+}
+
+#overlayInner {
+    width: 100%;
+    height: 100%;
+    min-height: 100px; /* Provides space while loading */
 }
 
 .close-btn {
@@ -2773,28 +2771,84 @@ function convertTo12HourFormat(time24) {
     
     return `${hours12}:${minutes} ${period}`;
 }
-       function openOverlay() {
-    document.querySelector('.overlay').classList.add('active');
-    document.body.classList.add('overlay-active');
+     // JavaScript for handling dynamic overlay content
+
+// Store original scroll position
+let scrollPosition = 0;
+
+// Function to open overlay and load content
+function openOverlay(contentUrl) {
+    // Store current scroll position
+    scrollPosition = window.pageYOffset;
+    
+    // Show overlay
+    const overlay = document.getElementById('overlay');
+    const overlayContent = document.getElementById('overlayContent');
+    const overlayInner = document.getElementById('overlayInner');
+    
+    // First show the overlay
+    overlay.classList.add('active');
+    
+    // Prevent background scrolling
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = '100%';
+    
+    // Load content with fetch API
+    fetch(contentUrl)
+        .then(response => response.text())
+        .then(html => {
+            overlayInner.innerHTML = html;
+        })
+        .catch(error => {
+            overlayInner.innerHTML = `<p>Error loading content: ${error.message}</p>`;
+        });
 }
 
+// Function to close overlay
 function closeOverlay() {
-    document.querySelector('.overlay').classList.remove('active');
-    document.body.classList.remove('overlay-active');
+    const overlay = document.getElementById('overlay');
+    
+    // Hide overlay
+    overlay.classList.remove('active');
+    
+    // Restore scrolling
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollPosition);
+    
+    // Clear content after animation completes
+    setTimeout(() => {
+        document.getElementById('overlayInner').innerHTML = '';
+    }, 300); // Match transition time
 }
-
-document.querySelectorAll('.close-btn').forEach(btn => {
-    btn.addEventListener('click', closeOverlay);
-});
 
 // Close overlay when clicking outside content
-document.querySelector('.overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeOverlay();
+document.getElementById('overlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeOverlay();
+    }
 });
 
 // Close overlay with escape key
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeOverlay();
+    if (e.key === 'Escape' && document.getElementById('overlay').classList.contains('active')) {
+        closeOverlay();
+    }
+});
+
+// Handle any forms within the overlay
+document.addEventListener('submit', function(e) {
+    const overlay = document.getElementById('overlay');
+    
+    // If the form is inside the overlay
+    if (overlay.contains(e.target) && e.target.tagName === 'FORM') {
+        // Here you can handle form submissions if needed
+        // Example: e.preventDefault(); // Prevent default if you want to handle via AJAX
+    }
 });
     </script>
 </body>
