@@ -270,9 +270,11 @@ body.dark-mode .nav-tabs button.active {
 }
 
 .header {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Creates the blur effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari support */
     padding: 15px 5%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -280,8 +282,11 @@ body.dark-mode .nav-tabs button.active {
 }
 
 .header.scrolled {
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly more opaque when scrolled */
     padding: 10px 5%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px); /* Increased blur when scrolled */
+    -webkit-backdrop-filter: blur(15px);
 }
 
 .top-section {
