@@ -1885,6 +1885,43 @@ body.dark-mode .juz-surahs li {
     
     .surah-card, .juz-card, .popular-surah, .calendar-widget {
         break-
+
+         text-align: center;
+      padding: 1rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .quran-heading {
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      transition: var(--transition-standard);
+    }
+    
+    .quran-heading:hover {
+      color: var(--primary-dark);
+      transform: translateY(-3px);
+      text-shadow: 0 4px 8px rgba(106, 13, 173, 0.2);
+    }
+    
+    .quran-heading::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-light), var(--gold));
+      transition: var(--transition-standard);
+    }
+    
+    .quran-heading:hover::after {
+      width: 80%;
+    }
     </style>
 </head>
 <body> 
@@ -1963,6 +2000,10 @@ body.dark-mode .juz-surahs li {
             </div>
         </div>
     </div>
+</div>
+
+    <div class="quran-title-section">
+<h1 class="quran-heading">Read the Quran in both Surahs And Juzz completely</h1>
 </div>
         
         <div class="nav-tabs">
