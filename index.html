@@ -1070,9 +1070,10 @@ body.dark-mode .nav-tabs button.active {
   display: none;
 }
 
-/* Sort and Filter with hover effects */
+/* Sort and Filter with modern hover effects and animations */
 .content-section {
   position: relative;
+  overflow: hidden; /* Prevents any animation overflow */
 }
 
 .sort-filter {
@@ -1081,43 +1082,148 @@ body.dark-mode .nav-tabs button.active {
   right: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  z-index: 5;
+  transition: transform 0.4s ease;
+}
+
+/* Add responsive handling for smaller screens */
+@media (max-width: 768px) {
+  .sort-filter {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 100%;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .sort-filter {
+    justify-content: center;
+    gap: 10px;
+  }
 }
 
 .sort-btn {
   background-color: var(--white);
   border: 1px solid var(--gray);
-  padding: 10px 15px;
-  border-radius: 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
+/* Modern hover effects */
 .sort-btn:hover {
   border-color: var(--primary);
   color: var(--primary);
   transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
+/* Add ripple effect on click */
 .sort-btn:active {
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Enhanced Surah Cards with Advanced Effects */
+/* Add subtle background animation on hover */
+.sort-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(var(--primary-rgb), 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: -1;
+}
+
+.sort-btn:hover::before {
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+/* Add subtle icon animation */
+.sort-btn svg,
+.sort-btn i {
+  transition: transform 0.3s ease;
+}
+
+.sort-btn:hover svg,
+.sort-btn:hover i {
+  transform: rotate(180deg);
+}
+
+/* Add focus styles for accessibility */
+.sort-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.3), 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Add active state */
+.sort-btn.active {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Add appear animation when the page loads */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sort-filter {
+  animation: slideIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Stagger animation for multiple buttons */
+.sort-btn:nth-child(1) { animation-delay: 0.1s; }
+.sort-btn:nth-child(2) { animation-delay: 0.2s; }
+.sort-btn:nth-child(3) { animation-delay: 0.3s; }
+
+/* Add animation for the buttons */
+.sort-btn {
+  animation: slideIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
+  animation-play-state: paused;
+}
+
+.sort-filter:hover .sort-btn {
+  animation-play-state: running;
+}
+
+/* Enhanced Surah Cards with Advanced Effects - Optimized */
 .surah-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 25px;
   perspective: 1000px;
+  /* Will-change helps browser optimize animations */
+  will-change: transform, opacity;
 }
 
+/* Optimize animations with more performant properties */
 @keyframes cardAppear {
   from {
     opacity: 0;
@@ -1129,20 +1235,27 @@ body.dark-mode .nav-tabs button.active {
   }
 }
 
+/* Card base styling with performance optimizations */
 .surah-card {
+  --card-transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                    box-shadow 0.4s ease,
+                    border-color 0.4s ease;
+  
   background-color: white;
   border-radius: 15px;
   padding: 20px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: var(--card-transition);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(230, 230, 230, 0.8);
   animation: cardAppear 0.6s ease forwards;
-  animation-delay: calc(var(--card-index, 0) * 0.1s);
+  animation-delay: calc(var(--card-index, 0) * 0.05s); /* Reduced delay for faster loading */
   opacity: 0;
   transform: translateY(20px);
+  /* Improve GPU acceleration */
+  will-change: transform, opacity, box-shadow;
 }
 
 .surah-card:hover {
@@ -1151,8 +1264,8 @@ body.dark-mode .nav-tabs button.active {
   border-color: rgba(var(--primary-rgb, 90, 107, 255), 0.3);
 }
 
-/* Islamic Decoration for Cards with enhanced animations */
-.surah-card:before {
+/* Top gradient bar with optimized transitions */
+.surah-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -1163,13 +1276,15 @@ body.dark-mode .nav-tabs button.active {
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
 }
 
-.surah-card:hover:before {
+.surah-card:hover::before {
   transform: scaleX(1);
 }
 
-.surah-card:after {
+/* Islamic decoration pattern - optimized rendering */
+.surah-card::after {
   content: '';
   position: absolute;
   bottom: -40px;
@@ -1179,17 +1294,19 @@ body.dark-mode .nav-tabs button.active {
   background-image: radial-gradient(circle at center, transparent 0%, transparent 40%, var(--primary) 40%, var(--primary) 45%, transparent 45%);
   background-size: 25px 25px;
   opacity: 0.1;
-  transition: all 0.5s ease;
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
   transform: rotate(0deg);
+  will-change: transform, opacity, width, height;
 }
 
-.surah-card:hover:after {
+.surah-card:hover::after {
   width: 120px;
   height: 120px;
   opacity: 0.2;
   transform: rotate(45deg);
 }
 
+/* Surah number badge with optimized transitions */
 .surah-number {
   position: absolute;
   top: 15px;
@@ -1203,9 +1320,12 @@ body.dark-mode .nav-tabs button.active {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              background-color 0.4s ease,
+              box-shadow 0.4s ease;
   box-shadow: 0 3px 8px var(--primary-shadow);
   z-index: 1;
+  will-change: transform;
 }
 
 .surah-card:hover .surah-number {
@@ -1214,16 +1334,17 @@ body.dark-mode .nav-tabs button.active {
   background-color: var(--primary);
 }
 
+/* Title styling with performant underline animation */
 .surah-title {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 10px;
-  transition: var(--transition-standard);
+  transition: color 0.3s ease;
   position: relative;
   display: inline-block;
 }
 
-.surah-title:after {
+.surah-title::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -1232,23 +1353,26 @@ body.dark-mode .nav-tabs button.active {
   height: 2px;
   background-color: var(--primary);
   transition: width 0.4s ease;
+  will-change: width;
 }
 
 .surah-card:hover .surah-title {
   color: var(--primary);
 }
 
-.surah-card:hover .surah-title:after {
+.surah-card:hover .surah-title::after {
   width: 100%;
 }
 
+/* Arabic title with optimized transform */
 .surah-arabic {
   font-size: 22px;
   margin-bottom: 12px;
   color: var(--primary);
   font-family: 'Traditional Arabic', 'Scheherazade', serif;
-  transition: all 0.5s ease;
+  transition: transform 0.5s ease, color 0.5s ease, text-shadow 0.5s ease;
   display: inline-block;
+  will-change: transform;
 }
 
 .surah-card:hover .surah-arabic {
@@ -1257,18 +1381,20 @@ body.dark-mode .nav-tabs button.active {
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Info section */
 .surah-info {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
   color: #666;
-  transition: var(--transition-standard);
+  transition: color 0.3s ease;
 }
 
 .surah-card:hover .surah-info {
   color: #444;
 }
 
+/* Revelation type badge with optimized animations */
 .revelation-type {
   display: inline-block;
   padding: 5px 10px;
@@ -1276,8 +1402,11 @@ body.dark-mode .nav-tabs button.active {
   font-size: 12px;
   font-weight: 500;
   margin-top: 12px;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  will-change: transform;
 }
 
 .surah-card:hover .revelation-type {
@@ -1285,6 +1414,7 @@ body.dark-mode .nav-tabs button.active {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Revelation type variations */
 .revelation-makkah {
   background-color: rgba(139, 98, 217, 0.15);
   color: var(--makkah-color);
@@ -1303,7 +1433,7 @@ body.dark-mode .nav-tabs button.active {
   background-color: rgba(54, 179, 126, 0.25);
 }
 
-/* Add card loading animation for better UX */
+/* Loading animation with reduced GPU usage */
 @keyframes pulseLoading {
   0% { opacity: 0.6; }
   50% { opacity: 0.8; }
@@ -1314,7 +1444,7 @@ body.dark-mode .nav-tabs button.active {
   animation: pulseLoading 1.5s infinite, cardAppear 0.6s ease forwards;
 }
 
-/* Media queries for responsiveness */
+/* Improved Responsiveness */
 @media (max-width: 768px) {
   .surah-grid {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1326,6 +1456,15 @@ body.dark-mode .nav-tabs button.active {
     margin-bottom: 20px;
     justify-content: flex-end;
   }
+  
+  /* Optimize animations for mobile to prevent janky scrolling */
+  .surah-card {
+    animation-duration: 0.4s;
+  }
+  
+  .surah-card:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
 }
 
 @media (max-width: 480px) {
@@ -1336,6 +1475,81 @@ body.dark-mode .nav-tabs button.active {
   
   .surah-grid {
     grid-template-columns: 1fr;
+  }
+  
+  /* Further reduced animations for very small screens */
+  .surah-card {
+    animation-delay: calc(var(--card-index, 0) * 0.03s);
+  }
+  
+  .surah-card:hover .surah-number {
+    transform: scale(1.1) rotate(10deg);
+  }
+}
+
+/* Add print media query for better printing */
+@media print {
+  .surah-grid {
+    display: block;
+  }
+  
+  .surah-card {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    box-shadow: none;
+    border: 1px solid #ddd;
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .surah-number {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* Add prefers-reduced-motion media query for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .surah-card,
+  .surah-card::before,
+  .surah-card::after,
+  .surah-number,
+  .surah-title::after,
+  .surah-arabic,
+  .revelation-type {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  .surah-card {
+    opacity: 1;
+  }
+  
+  .surah-card:hover {
+    transform: none;
+  }
+}
+
+/* Add dark mode support */
+@media (prefers-color-scheme: dark) {
+  .surah-card {
+    background-color: #1a1a1a;
+    border-color: rgba(60, 60, 60, 0.8);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .surah-title {
+    color: #e0e0e0;
+  }
+  
+  .surah-info {
+    color: #b0b0b0;
+  }
+  
+  .surah-card:hover .surah-info {
+    color: #d0d0d0;
   }
 }
 
